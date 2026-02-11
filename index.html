@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Classic Snake</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="panel">
+        <header class="header">
+          <div>
+            <h1>Classic Snake</h1>
+            <p class="subtle">Eat food, grow longer, avoid walls and yourself.</p>
+          </div>
+          <div class="score">
+            <span class="label">Score</span>
+            <span id="scoreValue" class="value">0</span>
+          </div>
+        </header>
+
+        <div class="board-wrap">
+          <canvas id="board" width="480" height="480" aria-label="Snake board"></canvas>
+          <div id="overlay" class="overlay" role="status" aria-live="polite">
+            <div class="overlay-card">
+              <h2 id="overlayTitle">Press Start</h2>
+              <p id="overlayText">Use arrow keys or WASD to move.</p>
+              <button id="startBtn" class="btn">Start</button>
+              <button id="restartBtn" class="btn btn-ghost">Restart</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="pad">
+            <button class="btn dir" data-dir="up" aria-label="Move up">▲</button>
+            <div class="row">
+              <button class="btn dir" data-dir="left" aria-label="Move left">◀</button>
+              <button class="btn dir" data-dir="down" aria-label="Move down">▼</button>
+              <button class="btn dir" data-dir="right" aria-label="Move right">▶</button>
+            </div>
+          </div>
+          <div class="actions">
+            <button id="pauseBtn" class="btn btn-ghost">Pause</button>
+            <button id="resumeBtn" class="btn">Resume</button>
+            <button id="musicBtn" class="btn btn-ghost">Music: On</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
