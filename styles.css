@@ -127,7 +127,7 @@ canvas {
   display: grid;
   gap: 8px;
   justify-items: center;
-  width: fit-content;
+  align-items: center;
 }
 
 .pad .row {
