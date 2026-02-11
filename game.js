@@ -244,7 +244,7 @@ function setupUI() {
       const y = segment.y * cell + 1;
       const size = cell - 2;
       if (idx === 0 && headReady) {
-        const headScale = 4;
+        const headScale = window.matchMedia("(max-width: 600px)").matches ? 2 : 4;
         const headSize = size * headScale;
         const radius = headSize / 2;
         const centerX = x + size / 2;
