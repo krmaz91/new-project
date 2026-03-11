@@ -132,30 +132,12 @@ function setupUI() {
   const restartBtn = document.getElementById("restartBtn");
   const pauseBtn = document.getElementById("pauseBtn");
   const resumeBtn = document.getElementById("resumeBtn");
-  const musicBtn = document.getElementById("musicBtn");
   const dirButtons = Array.from(document.querySelectorAll(".dir"));
 
   if (!canvas || !canvas.getContext) return;
   const ctx = canvas.getContext("2d");
 
   const game = createGame({ gridSize: CONFIG.gridSize });
-  const music = new Audio("theme.mp3");
-  music.loop = true;
-  music.volume = 0.4;
-  let musicEnabled = true;
-
-  const startMusic = () => {
-    if (!musicEnabled) return;
-    if (!music.paused) return;
-    music.play().catch(() => {});
-  };
-
-  const stopMusic = () => {
-    if (!music.paused) {
-      music.pause();
-      music.currentTime = 0;
-    }
-  };
   const headImage = new Image();
   const foodImage = new Image();
   let headReady = false;
@@ -166,8 +148,8 @@ function setupUI() {
   foodImage.onload = () => {
     foodReady = true;
   };
-  headImage.src = "img/impossiblelogo.png";
-  foodImage.src = "img/comp1.png";
+  headImage.src = "img/mokio.webp";
+  foodImage.src = "img/ball.webp";
   let running = false;
   let lastTime = 0;
   let accumulator = 0;
@@ -183,14 +165,12 @@ function setupUI() {
       game.reset();
     }
     running = true;
-    startMusic();
     setOverlay(false);
   };
 
   const pause = () => {
     running = false;
     if (game.state.alive) {
-      music.pause();
       setOverlay(true, "Paused", "Press resume to continue.");
     }
   };
@@ -198,7 +178,6 @@ function setupUI() {
   const resume = () => {
     if (game.state.alive) {
       running = true;
-      startMusic();
       setOverlay(false);
     }
   };
@@ -206,17 +185,62 @@ function setupUI() {
   const restart = () => {
     game.reset();
     running = true;
-    startMusic();
     setOverlay(false);
   };
 
   const draw = () => {
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--grid");
+    ctx.fillStyle = "#2a7c3f";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const cell = canvas.width / game.state.gridSize;
-    ctx.strokeStyle = "rgba(0,0,0,0.06)";
-    for (let i = 0; i <= game.state.gridSize; i += 1) {
+    const fieldMargin = cell * 0.5;
+    const fieldX = fieldMargin;
+    const fieldY = fieldMargin;
+    const fieldW = canvas.width - fieldMargin * 2;
+    const fieldH = canvas.height - fieldMargin * 2;
+
+    for (let i = 0; i < 8; i += 1) {
+      ctx.fillStyle = i % 2 === 0 ? "#348f49" : "#2d8442";
+      ctx.fillRect(fieldX, fieldY + (fieldH / 8) * i, fieldW, fieldH / 8);
+    }
+
+    ctx.strokeStyle = "rgba(255,255,255,0.92)";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(fieldX, fieldY, fieldW, fieldH);
+
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2, fieldY);
+    ctx.lineTo(canvas.width / 2, fieldY + fieldH);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, cell * 2.2, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, 4, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.92)";
+    ctx.fill();
+
+    const boxDepth = cell * 3;
+    const boxWidth = cell * 6;
+    const goalDepth = cell * 1.3;
+    const goalWidth = cell * 2.8;
+    const topBoxY = canvas.height / 2 - boxWidth / 2;
+
+    ctx.strokeRect(fieldX, topBoxY, boxDepth, boxWidth);
+    ctx.strokeRect(fieldX + fieldW - boxDepth, topBoxY, boxDepth, boxWidth);
+    ctx.strokeRect(fieldX, canvas.height / 2 - goalWidth / 2, goalDepth, goalWidth);
+    ctx.strokeRect(
+      fieldX + fieldW - goalDepth,
+      canvas.height / 2 - goalWidth / 2,
+      goalDepth,
+      goalWidth
+    );
+
+    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+    ctx.lineWidth = 1;
+    for (let i = 1; i < game.state.gridSize; i += 1) {
       ctx.beginPath();
       ctx.moveTo(i * cell, 0);
       ctx.lineTo(i * cell, canvas.height);
@@ -244,7 +268,7 @@ function setupUI() {
       const y = segment.y * cell + 1;
       const size = cell - 2;
       if (idx === 0 && headReady) {
-        const headScale = window.matchMedia("(max-width: 600px)").matches ? 2 : 4;
+        const headScale = window.matchMedia("(max-width: 600px)").matches ? 1 : 2;
         const headSize = size * headScale;
         const radius = headSize / 2;
         const centerX = x + size / 2;
@@ -277,7 +301,6 @@ function setupUI() {
 
   const handleGameOver = () => {
     running = false;
-    music.pause();
     setOverlay(true, "Game Over", "Press restart to try again.");
   };
 
@@ -324,17 +347,6 @@ function setupUI() {
   restartBtn.addEventListener("click", restart);
   pauseBtn.addEventListener("click", pause);
   resumeBtn.addEventListener("click", resume);
-  if (musicBtn) {
-    musicBtn.addEventListener("click", () => {
-      musicEnabled = !musicEnabled;
-      musicBtn.textContent = musicEnabled ? "Music: On" : "Music: Off";
-      if (musicEnabled && running) {
-        startMusic();
-      } else {
-        stopMusic();
-      }
-    });
-  }
   dirButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const dir = btn.dataset.dir;

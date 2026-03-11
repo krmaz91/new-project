@@ -4,21 +4,23 @@
 
 :root {
   color-scheme: light;
-  --bg: #f6f2ea;
-  --ink: #1c1a16;
-  --muted: #6a6357;
-  --panel: #ffffff;
-  --border: #ded6c8;
-  --snake: #2f6fd6;
-  --snake-head: #1f4ea8;
+  --bg: #0c3a1d;
+  --ink: #f3f6ef;
+  --muted: #d3decf;
+  --panel: rgba(9, 27, 14, 0.84);
+  --border: rgba(255, 255, 255, 0.18);
+  --snake: #d64545;
+  --snake-head: #a82d2d;
   --food: #c6452d;
-  --grid: #efe8dc;
+  --grid: #2e8d46;
 }
 
 body {
   margin: 0;
   font-family: "Georgia", "Times New Roman", serif;
-  background: radial-gradient(circle at top, #fff8ea 0%, var(--bg) 55%, #efe7d8 100%);
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 24%),
+    linear-gradient(180deg, #0f1f3f 0%, #173056 20%, #2d8f49 20%, #15431f 100%);
   color: var(--ink);
 }
 
@@ -33,9 +35,12 @@ body {
   width: min(720px, 100%);
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 20px 40px rgba(38, 30, 18, 0.08);
+  box-shadow:
+    0 28px 60px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
 }
 
 .header {
@@ -77,27 +82,69 @@ h1 {
 
 .board-wrap {
   position: relative;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: linear-gradient(180deg, #fbf6ee 0%, #f3ecdf 100%);
+  padding: 26px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(180deg, #59636a 0%, #2e363c 48%, #1b2328 100%);
   overflow: hidden;
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 255, 255, 0.04),
+    0 18px 32px rgba(0, 0, 0, 0.28);
+}
+
+.board-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.12) 0 14%, rgba(255, 255, 255, 0) 14.5%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.14) 0 12px,
+      rgba(255, 255, 255, 0) 12px 24px
+    );
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.board-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(18, 27, 34, 0.5) 0%, rgba(18, 27, 34, 0) 18%, rgba(18, 27, 34, 0) 82%, rgba(18, 27, 34, 0.6) 100%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.22) 0 2px,
+      rgba(255, 255, 255, 0) 2px 8px
+    );
+  opacity: 0.2;
+  pointer-events: none;
 }
 
 canvas {
   display: block;
   width: 100%;
   height: auto;
+  position: relative;
+  border-radius: 8px;
+  border: 4px solid rgba(232, 243, 226, 0.9);
+  box-shadow: 0 0 0 12px rgba(14, 24, 18, 0.48);
 }
 
 .overlay {
   position: absolute;
-  inset: 0;
+  inset: 26px;
   display: grid;
   place-items: center;
-  background: rgba(246, 242, 234, 0.82);
+  background: rgba(8, 26, 12, 0.62);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
+  border-radius: 8px;
 }
 
 .overlay.show {
@@ -107,8 +154,9 @@ canvas {
 
 .overlay-card {
   text-align: center;
-  background: #fffdf8;
-  border: 1px solid var(--border);
+  background: rgba(248, 252, 244, 0.92);
+  color: #172216;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   padding: 18px 22px;
   border-radius: 14px;
   max-width: 280px;
@@ -144,8 +192,8 @@ canvas {
 .btn {
   appearance: none;
   border: 1px solid var(--border);
-  background: #fdf9f3;
-  color: var(--ink);
+  background: rgba(244, 248, 239, 0.92);
+  color: #152215;
   padding: 8px 14px;
   border-radius: 999px;
   font-size: 14px;
@@ -160,7 +208,7 @@ canvas {
 }
 
 .btn-ghost {
-  background: #f2ece1;
+  background: rgba(222, 232, 216, 0.82);
 }
 
 .dir {
